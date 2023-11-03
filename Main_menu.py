@@ -9,5 +9,3 @@ automaton = {
         'q2': {'0': 'q0', '1': 'q1'},
     }
 }
-
-print("hello word")
