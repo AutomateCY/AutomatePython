@@ -21,25 +21,26 @@ print("   3 - modify a FSM")
 print("   4 - save a FSM in a file")
 print("   5 - delete a FSM")
 choice=input("What would you like to do ? (chose the number of the option wanted) ")
-print(choice)
+print(choice) #c'est un test
 
 match choice:
-    case 1:
+    case '1':
         print("You have choosen to enter a FSM")
         #creation_AEF()
-    case 2:
+    case '2':
         print("You have choosen to import an AEF from a file")
         path=input("Please, enter your file's path")
         #creation_AEF()
-    case 3:
+    case '3':
         print("You have choosen to modify a FSM. What would you do ?")
-    case 4:
+    case '4':
         print("You have choosen to save a FSM in a file.")
         #afficher_liste_FSM
         FSM_to_save=input("Which FSM would you like to save ?")
-    case 5:
+    case '5':
         print("You have choosen to save a FSM in a file.")
         #afficher_liste_FSM
         FSM_to_delete = input("Which FSM would you like to delete ?")
     case _:
-        exit('This is not a valid choice. Please, try again.')
+        print('This is not a valid choice. Please, try again.')
+        exit(1)
