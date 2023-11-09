@@ -18,6 +18,6 @@ def import_file(list_automatons):
             print("This file doesn't exist")
     try:
         data = json.load(file)
-        list_automatons.append(data)  # add the naw automaton to list_automatons
-    except json.JSONDecodeError:  # If the JSON file is ot correct
+        list_automatons.append(data)  # add the new automaton to list_automatons
+    except json.JSONDecodeError:  # If the JSON file is not correct
         print("File not readable. Verify the format, the file must be in JSON.")
