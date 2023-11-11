@@ -1,4 +1,4 @@
-def aut_input():    # to do the input of a new automaton
+def aut_input():  # to do the input of a new automaton
     # for the name
     name = str(input("What is the name of the automaton ?"))
 
@@ -11,7 +11,7 @@ def aut_input():    # to do the input of a new automaton
             break
         else:
             pre_alphabet.append(al)
-    alphabet = [i for j, i in enumerate(pre_alphabet) if i not in pre_alphabet[:j]]     # deletes duplicates
+    alphabet = [i for j, i in enumerate(pre_alphabet) if i not in pre_alphabet[:j]]  # deletes duplicates
     print("\n\n")
 
     # for the states
@@ -23,7 +23,7 @@ def aut_input():    # to do the input of a new automaton
             break
         else:
             pre_state.append(st)
-    states = [i for j, i in enumerate(pre_state) if i not in pre_state[:j]]     # deletes duplicates
+    states = [i for j, i in enumerate(pre_state) if i not in pre_state[:j]]  # deletes duplicates
     print("\n\n")
 
     # for the init state
@@ -61,7 +61,7 @@ def aut_input():    # to do the input of a new automaton
                 else:
                     print("The state you entered does not exist. Please try again\n")
 
-        f_state = [i for j, i in enumerate(finn_states) if i not in finn_states[:j]]    # deletes duplicates
+        f_state = [i for j, i in enumerate(finn_states) if i not in finn_states[:j]]  # deletes duplicates
     print("\n\n")
 
     # for the transitions
@@ -109,13 +109,3 @@ def aut_delete(list_auto, automaton):
             break
 
     return list_auto
-
-
-
-
-
-
-
-
-
-
