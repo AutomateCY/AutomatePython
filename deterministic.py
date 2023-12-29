@@ -7,6 +7,7 @@
     will return a deterministic copy of automaton
     if automaton is already deterministic, it will
     return a copy of it.
+    Will prune automaton.
 """
 
 
@@ -60,17 +61,17 @@ def deter_new_state(automaton, receiver_states, final_list, state_list, treated_
 
     # print("receiver_states", receiver_states)
     # print(state_list)
-    # creating new state only if not existing, and it's a non_deterministic transition.
+    #-- creating new state only if not existing, and it's a non_deterministic transition.
     if len(receiver_states) > 1 and (",".join(receiver_states) != treated_state) and (
             (",".join(receiver_states) not in state_list)):  #
 
-        # going through all states in transition
+        #-- going through all states in transition
         for s in receiver_states:
 
             # print("receiver_states", receiver_states)
             # print("s=", s)
 
-            # detect if state inherit final state
+            #-- detect if state inherit final state
             if s in final_list:
                 # print(s, "in", final_list)
                 add = 1
@@ -80,7 +81,7 @@ def deter_new_state(automaton, receiver_states, final_list, state_list, treated_
                 # print('now in', s, ':', automaton['transitions'][s])
                 # print("trans=", trans)
 
-                # create the transition if not existing, else only append
+                #-- create the transition if not existing, else only append
                 try:
                     # print("appending")
                     new_trans[trans] = set(new_trans[trans])
@@ -95,7 +96,7 @@ def deter_new_state(automaton, receiver_states, final_list, state_list, treated_
 
                 # print("new trans=", new_trans)
 
-        # create new state name by combining all transition.
+        #-- create new state name by combining all transition.
         receiver_states = ",".join(receiver_states)
         automaton['transitions'][receiver_states] = new_trans
 
@@ -105,7 +106,7 @@ def deter_new_state(automaton, receiver_states, final_list, state_list, treated_
 
     # print("new state generated:" + receiver_states + str(new_trans) + " \n")
 
-    # inherit final state
+    #-- inherit final state
     if add == 1:
         final_list.add(receiver_states)
     return receiver_states
@@ -113,25 +114,26 @@ def deter_new_state(automaton, receiver_states, final_list, state_list, treated_
 
 def make_deter(automaton):
     if isdeter(automaton):
+        # print("already deterministic.")
         return copy_automat(automaton)
 
-    print("Deterministic Conversion...")  # debug print
+    # print("Deterministic Conversion...")  # debug print
     automaton = copy_automat(automaton)
 
     # print('automaton:', str(automaton), "\n")
 
-    # making sets to avoid duplications
+    #-- making sets to avoid duplications
     new_final = set(automaton['final_states'])
     new_states_list = set([])
     todo = list(automaton['initial_states'])
-    # list of states to process, the rest is generated from deter_new_state
+    #-- list of states to process, the rest is generated from deter_new_state
 
     for state in todo:  # going through new states created
         # print("processing " + str(state) + "...")
-        # create next states to treat and add in todo list
+        #-- create next states to treat and add in todo list
         for transition in automaton['transitions'][state]:  # going through processed state's transitions
             # print("state" + str(automaton['transitions'][state]) + ":transition " + transition + "...\n")
-            # create next state
+            #-- create next state
             new_state = deter_new_state(automaton, automaton['transitions'][state][transition], new_final,
                                         new_states_list, state)
             # print('new=', new_state)
@@ -147,13 +149,19 @@ def make_deter(automaton):
         # print("state finished \n")
         new_states_list.add(state)
         # print('automaton:', str(automaton['transitions']), "\n")
-    # update automaton.
-    print('automaton:', str(automaton['transitions']), "\n")
+    
+
+    #-- update automaton.
+    # print('automaton:', str(automaton['transitions']), "\n")
     automaton['final_states'] = list(new_final)
+        #-- prune non treated states.
+    for i in automaton['states']:
+        if i not in new_states_list:
+           automaton['transitions'].pop(i)
+
     automaton['states'] = list(new_states_list)
-    automaton['states'].sort()  # to always have the same result for the same entry
+    automaton['states'].sort()  #-- for better legibility
     automaton['final_states'].sort()
-    print('done')  # debug print
     return automaton
 
 
