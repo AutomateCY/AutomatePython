@@ -30,6 +30,8 @@ def splitting(auto):
                     groups[state] = groups[state] + str (temp.get(auto["transitions"][state].get(letter)[0]))
                 except TypeError:
                     groups[state] = groups[state] + "none"
+                except KeyError:
+                    pass
                 #print(groups, "letter:" ,letter)
                 #print(temp)
             #print("\n"*2)        
@@ -72,6 +74,24 @@ def make_minimal(auto):
 
 
 #========== TEST RUN ==========#
+'''
+automaton4 = {
+    'name': "automaton2",
+    'states': ['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'],
+    'alphabet': ['a', 'b', ''],
+    'initial_states': ['q0'],
+    'final_states': ['q7'],
+    'transitions': {
+        'q0': {'': ['q1', 'q4']},
+        'q1': {'a': ['q2']},
+        'q2': {'a': ['q2', 'q3'], 'b':['q2']},
+        'q3': {'':['q7']},
+        'q4': {'b':['q5']},
+        'q5': {'a':['q5'], 'b':['q5','q6']},
+        'q6': {'':['q7']}
+
+    }
+}
 
 automaton = {'name': 'new automaton1', 
              'states': ['q0', 'q0,q0,q1', 'q0,q1', 'q1', 'q1,q2', 'q2'], 
@@ -87,7 +107,7 @@ automaton = {'name': 'new automaton1',
                  'q1,q2': {'0': ['q0,q0,q1'], '2': ['q0,q1'], '1': ['q2']}, 
                  'q0,q0,q1': {'0': ['q0,q1'], '1': ['q1'], '2': ['q1,q2']}}}
 
-print(make_minimal(automaton))
+print(make_minimal(automaton4))
 #'''
 
 '''
