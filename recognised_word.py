@@ -1,3 +1,5 @@
+from deterministic import make_deter, isdeter
+
 automaton = {
     'name': "automate1",
     'states': ['q0', 'q1', 'q2'],
