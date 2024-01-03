@@ -26,5 +26,5 @@ Concerning the automaton's import, you have to select the file you want to impor
 }
 ```
 To modify an automaton, select the element you want to interact with and modify it following the dedicated menu.
-If you have any question or want more information, ask our service desk at [mail]@cy-tech.fr.
+If you have any question or want more information, ask our service desk at landrysimo@cy-tech.fr.
 
