@@ -66,4 +66,4 @@ def make_complete(automaton):
 
 
 
-aut = make_complete(automaton)
+# aut = make_complete(automaton)

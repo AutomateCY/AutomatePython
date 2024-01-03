@@ -182,6 +182,7 @@ def concatenation(automaton1, automaton2):
 
 
 # TEST AREA
+'''
 test = False
 if test:
     automatons_to_multiply = [
@@ -265,4 +266,4 @@ if test:
             'E': {'5': ['C']}
         }
     }
-    print("pruned_aut : ", pruned(aut_to_pruned))
+    print("pruned_aut : ", pruned(aut_to_pruned))'''

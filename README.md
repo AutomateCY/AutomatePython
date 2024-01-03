@@ -11,7 +11,6 @@ To interact with the program, you have to follow instructions given in the main 
 
 During the automaton's export, you can choose where you want to save it. When you have chosen the path, open the selected folder and you will find the automaton.
 Concerning the automaton's import, you have to select the file you want to import, compatible with the following structure and import it :
-```python
 {
     'name': "automaton1",
     'states': ['q0', 'q1', 'q2'],
@@ -24,7 +23,7 @@ Concerning the automaton's import, you have to select the file you want to impor
         'q2': {'0': ['q0'], '1': ['q1']},
     }
 }
-```
+
 To modify an automaton, select the element you want to interact with and modify it following the dedicated menu.
-If you have any question or want more information, ask our service desk at landrysimo@cy-tech.fr.
+If you have any question or want more information, ask our service desk at [mail]@cy-tech.fr.
 
