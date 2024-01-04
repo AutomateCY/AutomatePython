@@ -155,7 +155,7 @@ def auto_to_save(automaton, listauto=list_automatons):
     print(automaton)
     choice = '2'
     while not (choice == '0' or choice == '1'):
-        choice = input("Would you like to save the automaton in the list ? (0 for Yes and 1 for No")
+        choice = input("Would you like to save the automaton in the list ? (0 for Yes and 1 for No) ")
     if choice == '0':
         listauto.append(automaton)
 
