@@ -349,7 +349,7 @@ def input_automaton(auto=None):
 
 
 # ##############################-TEST RUN-#######################################
-
+'''
 automaton1 = {
     'name': "automaton1",
     'states': ['q0', 'q1', 'q2'],
@@ -363,4 +363,4 @@ automaton1 = {
     }
 }
 input_automaton(automaton1)
-#'''
+'''

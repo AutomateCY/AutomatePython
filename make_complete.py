@@ -63,7 +63,3 @@ def make_complete(automaton):
                     complete_aut['transitions'][i][n] = ['phi']
     return complete_aut
 
-
-
-
-aut = make_complete(automaton)

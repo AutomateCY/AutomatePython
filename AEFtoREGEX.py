@@ -132,8 +132,28 @@ def regular_expression(equations, start):
         value_epsilon = "(" + equations[start][equations[start].index("€") - 1] + ")"
     return value_start + value_epsilon
 
+
+
+def get_equation(dict):
+    equation = {}
+    final = dict["final_states"][0]
+    start = dict["initial_states"][0]
+    dict = dict["transitions"]
+    for key, values in dict.items():
+        temp = []
+        for key2, values2 in values.items():
+            for item in values2:
+                temp.append(key2)
+                temp.append(item)
+            if key == final :
+                temp.append('')
+                temp.append("€")
+            equation[key]=temp
+    return regular_expression(equation, start)
+
+
 # Tests#
-# e = {"1": ["a", "2", "b", "3"], "2": ["b", "1", "a", "3"], "3": ["a", "1", "b", "2","","€"]}
-# e = {"1": ["a", "2", "b", "3"], "2": ["b", "1"], "3": ["a", "2","","€"]}
-# e = {"1": ["a", "2", "b", "4"], "2": ["b", "5", "a", "3"], "3": ["b", "2"], "4": ["a", "5"], "5": ["", "€"]}
-# print(regular_expression(e,"1"))
+#e = {"1": ["a", "2", "b", "3"], "2": ["b", "1", "a", "3"], "3": ["a", "1", "b", "2","","€"]}
+#e = {"1": ["a", "2", "b", "3"], "2": ["b", "1"], "3": ["a", "2","","€"]}
+#e = {'q0': ['1', 'q1'], 'q1': ['0', 'q1', '', '€']}
+#print(regular_expression(e, 'q0'))

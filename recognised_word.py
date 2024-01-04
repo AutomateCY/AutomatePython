@@ -50,6 +50,3 @@ def recognised_word(automaton, word):
 
 
 
-recognised_word(automaton, '011')
-
-
