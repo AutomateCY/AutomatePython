@@ -41,12 +41,12 @@ def resolve_equations(initial_state, start: str, equations: dict[str, list[str]]
                         resolve_equations(initial_state, start, equations, passed_states, states_to_not_aiden)
                         break
                     else:
-                        if len(equations[state]) == 2: #When state=language state
+                        if len(equations[state]) == 2 and state not in equations[state]: #When state=language state
                             equations[start][i * 2] = equations[start][i * 2] + equations[state][0]
                             equations[start][i * 2 + 1] = equations[state][1]
                             if start in equations[start]:
                                 resolve_equations(initial_state, start, equations, passed_states, states_to_not_aiden)
-                        elif len(equations[state]) == 4:
+                        elif len(equations[state]) == 4 and state not in equations[state]:
                             if (equations[state][3] == "€"): #When state=language state + language epsilon
                                 v = equations[start][i * 2]
                                 equations[start][i * 2] = v + equations[state][0]

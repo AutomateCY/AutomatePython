@@ -42,18 +42,18 @@ def browse_automaton(automaton, state, list_states_non_co_reachable, list_states
     """browse 'automaton' recursively to find the non-reachable and non co-reachable"""
     if state not in list_states_reachable:
         list_states_reachable.append(state)
-    if state in automaton["transitions"]:
-        for letter in automaton["transitions"][state]:
-            for end in automaton["transitions"][state][letter]:
-                browse_automaton(automaton, end, list_states_non_co_reachable, list_states_reachable)
-    elif state not in automaton["final_states"] and state not in list_states_non_co_reachable:
-        list_states_non_co_reachable.append(state)
+        if state in automaton["transitions"]:
+            for letter in automaton["transitions"][state]:
+                for end in automaton["transitions"][state][letter]:
+                    browse_automaton(automaton, end, list_states_non_co_reachable, list_states_reachable)
+        elif state not in automaton["final_states"] and state not in list_states_non_co_reachable:
+            list_states_non_co_reachable.append(state)
 
 
 def complement(automaton):
     aut_complement = automaton.copy()
     final_states = automaton["final_states"]
-    aut_complement["final_states"] = [i for i in range(aut_complement['states']) if i not in final_states]
+    aut_complement["final_states"] = [i for i in aut_complement['states'] if i not in final_states]
     return aut_complement
 
 
@@ -130,32 +130,34 @@ def product2(automaton1, automaton2):
                          'transitions': {
                          }}
     product_recursive(automaton1, automaton2, automaton1["initial_states"][0],
-                      automaton2["initial_states"][0], automaton_product)
+                      automaton2["initial_states"][0], automaton_product, [])
     # return pruned(automaton_product) #to think : need to make it pruned or does my function makes it already (or make it so)
     return automaton_product
 
 
-def product_recursive(automaton1, automaton2, state_aut1, state_aut2, automaton_final):
+def product_recursive(automaton1, automaton2, state_aut1, state_aut2, automaton_final, states_already_passed):
     """browse the automaton to do the product of 'automaton1' and 'automaton2'"""
-    fusion_states = state_aut1 + state_aut2
-    automaton_final["states"].append(fusion_states)
-    if state_aut1 in automaton1["initial_states"] and state_aut2 in automaton2["initial_states"]:
-        automaton_final["initial_states"].append(fusion_states)
-    if state_aut1 in automaton1["final_states"] and state_aut2 in automaton2["final_states"]:
-        automaton_final["final_states"].append(fusion_states)
-    if state_aut1 in automaton1["transitions"] and state_aut2 in automaton2["transitions"]:
-        list_common_transition = list(set(automaton1["transitions"][state_aut1].keys()) & set(
-            automaton2["transitions"][state_aut2].keys()))
-        if len(list_common_transition) > 0:
-            automaton_final["transitions"][fusion_states] = {}
-            for commun_transition in list_common_transition:
-                automaton_final["alphabet"].append(commun_transition)
-                automaton_final["transitions"][fusion_states][commun_transition] = []
-                for end_state_aut1 in automaton1["transitions"][state_aut1][commun_transition]:
-                    for end_state_aut2 in automaton2["transitions"][state_aut2][commun_transition]:
-                        fusion_end_states = end_state_aut1 + end_state_aut2
-                        automaton_final["transitions"][fusion_states][commun_transition].append(fusion_end_states)
-                        product_recursive(automaton1, automaton2, end_state_aut1, end_state_aut2, automaton_final)
+    if (state_aut1+state_aut2 not in states_already_passed):
+        states_already_passed.append(state_aut1+state_aut2)
+        fusion_states = state_aut1 + state_aut2
+        automaton_final["states"].append(fusion_states)
+        if state_aut1 in automaton1["initial_states"] and state_aut2 in automaton2["initial_states"]:
+            automaton_final["initial_states"].append(fusion_states)
+        if state_aut1 in automaton1["final_states"] and state_aut2 in automaton2["final_states"]:
+            automaton_final["final_states"].append(fusion_states)
+        if state_aut1 in automaton1["transitions"] and state_aut2 in automaton2["transitions"]:
+            list_common_transition = list(set(automaton1["transitions"][state_aut1].keys()) & set(
+                automaton2["transitions"][state_aut2].keys()))
+            if len(list_common_transition) > 0:
+                automaton_final["transitions"][fusion_states] = {}
+                for commun_transition in list_common_transition:
+                    automaton_final["alphabet"].append(commun_transition)
+                    automaton_final["transitions"][fusion_states][commun_transition] = []
+                    for end_state_aut1 in automaton1["transitions"][state_aut1][commun_transition]:
+                        for end_state_aut2 in automaton2["transitions"][state_aut2][commun_transition]:
+                            fusion_end_states = end_state_aut1 + end_state_aut2
+                            automaton_final["transitions"][fusion_states][commun_transition].append(fusion_end_states)
+                            product_recursive(automaton1, automaton2, end_state_aut1, end_state_aut2, automaton_final, states_already_passed)
 
 
 def concatenation(automaton1, automaton2):

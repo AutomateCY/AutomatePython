@@ -78,15 +78,19 @@ def main_loop():
             print("You have chosen to perform operations on a FSM. On which automaton would you like to perform operations ? \n")
             num = '0'
             while not (num == '1' or num == '2' or num == '3' or num == '4'):
-                num = int(input("1 for complement | 2 for Mirror | 3 for Product | 4 for concatenation | 5 for quit"))
+                num = input("1 for complement | 2 for Mirror | 3 for Product | 4 for concatenation | 5 for quit")
             if num == '1':
                 auto_to_save(complement(auto_choice(list_automatons))) # automate a remplacer et pas rajouter dans la liste
+                main_loop()
             elif num == '2':
                 auto_to_save(mirror(auto_choice(list_automatons))) # automate a remplacer et pas rajouter dans la liste
+                main_loop()
             elif num == '3':
                 auto_to_save(product2(auto_choice(list_automatons), auto_choice(list_automatons)))
+                main_loop()
             elif num == '4':
                 auto_to_save(concatenation(auto_choice(list_automatons), auto_choice(list_automatons)))
+                main_loop()
             elif num == '5':
                 main_loop()
         case '8':
