@@ -87,40 +87,6 @@ def mirror(automaton):
 
 
 def product(automaton1, automaton2):
-    """return the product of 2 automatons, 'automaton1' and 'automaton2', in a non-recursive way"""
-    product_aut = {'name': "product " + automaton1["name"] + " and " + automaton2["name"],
-                   'states': [],
-                   'alphabet': [],
-                   'initial_states': [],
-                   'final_states': [],
-                   'transitions': {
-                   }}
-    for state_aut1 in automaton1['states']:
-        for state_aut2 in automaton2['states']:
-            product_aut["states"].append(state_aut1 + state_aut2)
-            if state_aut1 in automaton1["final_states"] and state_aut2 in automaton2["final_states"]:
-                product_aut["final_states"].append(state_aut1 + state_aut2)
-            if state_aut1 in automaton1["initial_states"] and state_aut2 in automaton2["initial_states"]:
-                product_aut["initial_states"].append(state_aut1 + state_aut2)
-            if state_aut1 in automaton1["transitions"] and state_aut2 in automaton2["transitions"]:
-                list_common_transition = list(set(automaton1["transitions"][state_aut1].keys()) & set(
-                    automaton2["transitions"][state_aut2].keys()))
-                if len(list_common_transition) > 0:
-                    product_aut["transitions"][state_aut1 + state_aut2] = {}
-                for transition_name in list_common_transition:
-                    if transition_name not in product_aut["alphabet"]:
-                        product_aut["alphabet"].append(transition_name)
-                    for end_transition_aut1 in automaton1["transitions"][state_aut1][transition_name]:
-                        for end_transition_aut2 in automaton2["transitions"][state_aut2][transition_name]:
-                            new_end = [end_transition_aut1 + end_transition_aut2]
-                            product_aut["transitions"][state_aut1 + state_aut2][
-                                transition_name] = new_end if transition_name not in product_aut["transitions"][
-                                state_aut1 + state_aut2] else product_aut["transitions"][state_aut1 + state_aut2][
-                                                                  transition_name] + new_end
-    return pruned(product_aut)
-
-
-def product2(automaton1, automaton2):
     """return the product of 2 automatons, 'automaton1' and 'automaton2', with a recursive function"""
     automaton_product = {'name': "product " + automaton1["name"] + " and " + automaton2["name"],
                          'states': [],
@@ -131,7 +97,6 @@ def product2(automaton1, automaton2):
                          }}
     product_recursive(automaton1, automaton2, automaton1["initial_states"][0],
                       automaton2["initial_states"][0], automaton_product, [])
-    # return pruned(automaton_product) #to think : need to make it pruned or does my function makes it already (or make it so)
     return automaton_product
 
 
@@ -212,7 +177,6 @@ if test:
     ]
 
     print(product(automatons_to_multiply[0], automatons_to_multiply[1]))
-    print(product2(automatons_to_multiply[0], automatons_to_multiply[1]))
 
     aut_to_mirror = {
         'name': "automate1",

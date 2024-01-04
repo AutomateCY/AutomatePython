@@ -96,7 +96,7 @@ def main_loop():
                 auto_to_save(mirror(auto_choice(list_automatons)))  # automate a remplacer et pas rajouter dans la liste
                 main_loop()
             elif num == '3':
-                auto_to_save(product2(auto_choice(list_automatons), auto_choice(list_automatons)))
+                auto_to_save(product(auto_choice(list_automatons), auto_choice(list_automatons)))
                 main_loop()
             elif num == '4':
                 auto_to_save(concatenation(auto_choice(list_automatons), auto_choice(list_automatons)))
