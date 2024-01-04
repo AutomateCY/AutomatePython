@@ -68,6 +68,7 @@ def main_loop():
         case '5':
             print("You have chosen to delete a FSM . Which automaton would you like to delete ? \n")
             aut_delete(list_automatons, auto_choice(list_automatons))
+            print_function(list_automatons)
             main_loop()
             # si ne marche pas, demander à David la fonction python qui supprime automatiquement un élément dans une liste
 
