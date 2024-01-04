@@ -39,6 +39,8 @@ def main_loop():
     print("   9 - show if 2 FSM are equivalent")
     print("   10 - make a FSM trimmed")
     print("   11 - make a FSM minimal")
+    print("   12 - check if a FSM is complete")
+    print("   13 - make a FSM complete")
     choice = input("What would you like to do ? (choose the number of the option wanted) ")
     print_function(list_automatons)
 
@@ -80,7 +82,9 @@ def main_loop():
             while not (num == '1' or num == '2' or num == '3' or num == '4'):
                 num = input("1 for complement | 2 for Mirror | 3 for Product | 4 for concatenation | 5 for quit")
             if num == '1':
-                auto_to_save(complement(auto_choice(list_automatons))) # automate a remplacer et pas rajouter dans la liste
+                current_dict = auto_choice(list_automatons)
+                if is_complete(current_dict) == 0:
+                    auto_to_save(complement(current_dict)) # automate a remplacer et pas rajouter dans la liste
                 main_loop()
             elif num == '2':
                 auto_to_save(mirror(auto_choice(list_automatons))) # automate a remplacer et pas rajouter dans la liste
@@ -118,8 +122,16 @@ def main_loop():
             auto_to_save(make_minimal(auto_choice(list_automatons)))
             main_loop()
 
+        case '12':
+            print("You have chosen to check if a FSM is complete. Which automaton would you like to check ?")
+            is_complete(auto_choice(list_automatons))
+            sleep(5)
+            main_loop()
+        case '13':
+            print("You have chosen to make a FSM complete. Which automaton would you like to make complete ?")
+            auto_to_save(make_complete(auto_choice(list_automatons)))
+            main_loop()
         case _:
-            print('This is not a valid choice. Please, try again.')
             main_loop()
 
 
