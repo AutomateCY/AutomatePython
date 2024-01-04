@@ -135,21 +135,24 @@ def regular_expression(equations, start):
 
 
 def get_equation(dict):
-    equation = {}
-    final = dict["final_states"][0]
-    start = dict["initial_states"][0]
-    dict = dict["transitions"]
-    for key, values in dict.items():
-        temp = []
-        for key2, values2 in values.items():
-            for item in values2:
-                temp.append(key2)
-                temp.append(item)
-            if key == final :
-                temp.append('')
-                temp.append("€")
-            equation[key]=temp
-    return regular_expression(equation, start)
+    if dict["initial_states"][0] in dict['transitions']:
+        equation = {}
+        final = dict["final_states"][0]
+        start = dict["initial_states"][0]
+        dict = dict["transitions"]
+        for key, values in dict.items():
+            temp = []
+            for key2, values2 in values.items():
+                for item in values2:
+                    temp.append(key2)
+                    temp.append(item)
+                if key == final :
+                    temp.append('')
+                    temp.append("€")
+                equation[key]=temp
+        return regular_expression(equation, start)
+    else:
+        return ""
 
 
 # Tests#

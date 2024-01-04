@@ -10,7 +10,9 @@ def import_file(list_automatons):
     file_exists = False
     file = None
     while not file_exists:  # while the user enter a non-existent file
-        path_file = input("Enter the path of the file you want to import :")
+        path_file = input("Enter the path of the file you want to import :  (stop to quit)")
+        if path_file == "stop":
+            return 0
         if exists(path_file):
             file = open(path_file, "r")
             file_exists = True

@@ -50,7 +50,7 @@ def input_choice(min, max, menu='\n'): #-- to make sure the user do not destroy 
     return int(choice)
 
 
-def modify_list(old, condition = None, condition_name = None, kill = None, alpha = None) :
+def modify_list(old, condition = None, condition_name = None, kill = None, alpha = None, hedgehog = None):
     # to add and remove elements from list
     # condition is a list where element must be in order to be added
     # for instance, if new transition is in alphabet, it can be added.
@@ -97,6 +97,9 @@ def modify_list(old, condition = None, condition_name = None, kill = None, alpha
             new_list[i]=ans
             
         elif ans == "stop":
+            if( hedgehog==1 and len(new_list)==0):
+                print("\n /!\ need at least 1 in list ","'",ans,"")
+                ans = 0
             pass
         else:
             if ans == "mod":
@@ -254,11 +257,11 @@ def input_automaton(auto=None):
         elif choice == 4: #-- modify initial states
             if create == 1:
                 print("now defining initial_states...")
-            auto['initial_states']=modify_list(auto['initial_states'], auto['states'], 'state list', 1)
+            auto['initial_states']=modify_list(auto['initial_states'], auto['states'], 'state list', 1, None, 1)
         elif choice == 5: #-- modify final states
             if create == 1:
                 print("now defining final_states...")
-            auto['final_states']=modify_list(auto['final_states'], auto['states'], 'state list', 1)
+            auto['final_states']=modify_list(auto['final_states'], auto['states'], 'state list', 1, None, 1)
             
         
         elif choice == 6: 

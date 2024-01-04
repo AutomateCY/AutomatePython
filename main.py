@@ -11,6 +11,7 @@ from operations import *
 from recognised_word import *
 from save import *
 from AEFtoREGEX import *
+
 # fichiers en gris à supprimer
 
 list_automatons = [{
@@ -41,6 +42,7 @@ def main_loop():
     print("   11 - make a FSM minimal")
     print("   12 - check if a FSM is complete")
     print("   13 - make a FSM complete")
+    print("   14 - quit")
     choice = input("What would you like to do ? (choose the number of the option wanted) ")
     print_function(list_automatons)
 
@@ -68,27 +70,30 @@ def main_loop():
         case '5':
             print("You have chosen to delete a FSM . Which automaton would you like to delete ? \n")
             aut_delete(list_automatons, auto_choice(list_automatons))
+            print("New automaton list : \n")
             print_function(list_automatons)
             main_loop()
             # si ne marche pas, demander à David la fonction python qui supprime automatiquement un élément dans une liste
 
         case '6':
-            print("You have chosen to make a FSM deterministic. Which automaton would you like to make deterministic ? \n")
+            print(
+                "You have chosen to make a FSM deterministic. Which automaton would you like to make deterministic ? \n")
             auto_to_save(make_deter(auto_choice(list_automatons)))
             main_loop()
 
         case '7':
-            print("You have chosen to perform operations on a FSM. On which automaton would you like to perform operations ? \n")
+            print(
+                "You have chosen to perform operations on a FSM. On which automaton would you like to perform operations ? \n")
             num = '0'
             while not (num == '1' or num == '2' or num == '3' or num == '4'):
                 num = input("1 for complement | 2 for Mirror | 3 for Product | 4 for concatenation | 5 for quit")
             if num == '1':
                 current_dict = auto_choice(list_automatons)
                 if is_complete(current_dict) == 0:
-                    auto_to_save(complement(current_dict)) # automate a remplacer et pas rajouter dans la liste
+                    auto_to_save(complement(current_dict))  # automate a remplacer et pas rajouter dans la liste
                 main_loop()
             elif num == '2':
-                auto_to_save(mirror(auto_choice(list_automatons))) # automate a remplacer et pas rajouter dans la liste
+                auto_to_save(mirror(auto_choice(list_automatons)))  # automate a remplacer et pas rajouter dans la liste
                 main_loop()
             elif num == '3':
                 auto_to_save(product2(auto_choice(list_automatons), auto_choice(list_automatons)))
@@ -99,15 +104,18 @@ def main_loop():
             elif num == '5':
                 main_loop()
         case '8':
-            print("You have chosen to show a FSM's regular expression and known language. Which automaton would you like to show a FSM's regular expression and known language ? \n")
-            print("The regular expression is : " , get_equation(auto_choice(list_automatons)))
+            print(
+                "You have chosen to show a FSM's regular expression and known language. Which automaton would you "
+                "like to show a FSM's regular expression and known language ? \n")
+            print("The regular expression is : ", get_equation(make_deter(auto_choice(list_automatons))))
             sleep(5)
             main_loop()
 
         case '9':
-            print("You have chosen to show if 2 FSM are equivalent. Which automatons would you like to see their equivalence ? \n")
-            choice1 = get_equation(auto_choice(list_automatons))
-            choice2 = get_equation(auto_choice(list_automatons))
+            print(
+                "You have chosen to show if 2 FSM are equivalent. Which automatons would you like to see their equivalence ? \n")
+            choice1 = get_equation(make_deter(auto_choice(list_automatons)))
+            choice2 = get_equation(make_deter(auto_choice(list_automatons)))
             if choice1 == choice2:
                 print("These FSM are equivalent")
                 sleep(5)
@@ -132,6 +140,8 @@ def main_loop():
             print("You have chosen to make a FSM complete. Which automaton would you like to make complete ?")
             auto_to_save(make_complete(auto_choice(list_automatons)))
             main_loop()
+        case '14':
+            return 0
         case _:
             main_loop()
 
@@ -139,8 +149,10 @@ def main_loop():
 def print_function(list_auto):
     j = 0
     for i in list_auto:
-        print(j,i,"\n")
+        print(j, i, "\n")
         j += 1
+
+
 def auto_choice(list_fsm):
     print_function(list_fsm)
     number = '€'
@@ -148,9 +160,10 @@ def auto_choice(list_fsm):
     choices = [str(x) for x in choices]
     while not ((number in choices) and (number.isdigit())):
         number = input("Your choice (if stop, you come back to the main menu) : ")
-        if (number == "stop"):
+        if number == "stop":
             main_loop()
     return list_fsm[int(number)]
+
 
 def auto_to_save(automaton, listauto=list_automatons):
     print(automaton)
@@ -164,8 +177,10 @@ def auto_to_save(automaton, listauto=list_automatons):
 def welcome():
     print("\nWelcome to our finite state machine's (FSM) program ! \n")
 
-    name=input("Please, tell me your name : ")
-    print("Welcome "+name+" ! We recommend you to read the 'ReadMe.md' to find out more about how our code works. \n")
+    name = input("Please, tell me your name : ")
+    print(
+        "Welcome " + name + " ! We recommend you to read the 'ReadMe.md' to find out more about how our code works. \n")
+
 
 welcome()
 main_loop()
