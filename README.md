@@ -6,7 +6,7 @@ You have to download the code to run the program. You may probably download it i
 When it's unziped, it is important to have all files in the same directory.
 You have 2 (or more) possibilities :
 1) open "main.py" and press F5 or the "run" button ;
-2) open a terminal, navigate to the folder with "cd" and enter "python main.py" : the program will start. 
+2) open a terminal, navigate to the folder with "cd" and enter "python3 main.py" : the program will start. 
 When it's done, you will be asked to choose what do you want to do with automatons. 
 You have 5 features : create, import, modify, save and delete an automaton.
 
