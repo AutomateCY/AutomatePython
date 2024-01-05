@@ -97,7 +97,7 @@ def modify_list(old, condition = None, condition_name = None, kill = None, alpha
             new_list[i]=ans
             
         elif ans == "stop":
-            if( hedgehog==1 and len(new_list)==0):
+            if( hedgehog==1 and (len(new_list)==0 or not(set(new_list) != {None}))):
                 print("\n /!\ need at least 1 in list ","'",ans,"")
                 ans = 0
             pass
@@ -257,11 +257,11 @@ def input_automaton(auto=None):
         elif choice == 4: #-- modify initial states
             if create == 1:
                 print("now defining initial_states...")
-            auto['initial_states']=modify_list(auto['initial_states'], auto['states'], 'state list', 1, None, 1)
+            auto['initial_states']=modify_list(auto['initial_states'], auto['states'], 'state list', 1, None)
         elif choice == 5: #-- modify final states
             if create == 1:
                 print("now defining final_states...")
-            auto['final_states']=modify_list(auto['final_states'], auto['states'], 'state list', 1, None, 1)
+            auto['final_states']=modify_list(auto['final_states'], auto['states'], 'state list', 1, None)
             
         
         elif choice == 6: 
@@ -338,6 +338,14 @@ def input_automaton(auto=None):
                 choice = 6 # to allow create mode to continue.
         
         elif choice==7: #-- stop loop
+            if auto['final_states'] == []:
+                print("final_states must have at least 1 state")
+                if create == 0:
+                    choice = 0
+            if auto['initial_states'] == []:
+                print("initial_states must have at least 1 state")
+                if create == 0:
+                    choice = 0
             pass
         elif choice==8: #-- stop creating mode
             print("do you wish to change something?")
