@@ -200,11 +200,11 @@ def input_automaton(auto=None):
             #-- in create mode you just create new states
             if create == 1:
                 print("now enter the states of your automaton...")
-                auto['states'] = modify_list(auto["states"], None, None, 1)
+                auto['states'] = modify_list(auto["states"], None, None, 1, None, 1)
             
             
             if create != 1: #-- if not in create mode = if in modify mode
-                new_state_list = modify_list(auto["states"])
+                new_state_list = modify_list(auto["states"], None, None, None, None, 1)
                 choice = input_choice(1,2,"1: rename states \n2: delete old states")
 
                 if choice == 2: #-- goes through automaton and keep only states that are in new state list.
