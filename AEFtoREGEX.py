@@ -41,13 +41,13 @@ def resolve_equations(initial_state, start: str, equations: dict[str, list[str]]
                         resolve_equations(initial_state, start, equations, passed_states, states_to_not_aiden)
                         break
                     else:
-                        if len(equations[state]) == 2 and state not in equations[state]: #When state=language state
+                        if len(equations[state]) == 2 and state not in equations[state]:  # When state=language state
                             equations[start][i * 2] = equations[start][i * 2] + equations[state][0]
                             equations[start][i * 2 + 1] = equations[state][1]
                             if start in equations[start]:
                                 resolve_equations(initial_state, start, equations, passed_states, states_to_not_aiden)
                         elif len(equations[state]) == 4 and state not in equations[state]:
-                            if (equations[state][3] == "€"): #When state=language state + language epsilon
+                            if (equations[state][3] == "€"):  # When state=language state + language epsilon
                                 v = equations[start][i * 2]
                                 equations[start][i * 2] = v + equations[state][0]
                                 equations[start][i * 2 + 1] = equations[state][1]
@@ -89,49 +89,54 @@ def resolve_equations(initial_state, start: str, equations: dict[str, list[str]]
 
 
 def regular_expression(equations, start):
+    equations_not_changed_yet = {i: equations[i][:] for i in equations}
     resolve_equations(start, start, equations, [], [])
-    print(equations)
-    while equations[start].count(start) + equations[start].count("€") != len(equations[start]) // 2:
+    while equations[start].count(start) + equations[start].count("€") != len(
+            equations[start]) // 2 and equations_not_changed_yet != equations:
+        equations_not_changed_yet = {i: equations[i][:] for i in equations}
         resolve_equations(start, start, equations, [], [start])
-    count_start = equations[start].count(start)
-    count_epsilon = equations[start].count("€")
-    if count_epsilon > 1: #if there are more than one epsilon -> factorisation
-        index_start = equations[start].index("€") - 1
-        index_to_del = []
-        total_value = ""
-        for i in range(len(equations[start]) // 2):
-            if equations[start][i * 2 + 1] == "€":
-                value = equations[start][i * 2]
-                total_value = total_value + "+" + value
-                if i * 2 != index_start:
-                    index_to_del.append(i * 2)
-        equations[start][index_start] = total_value[1:]
-        for i in range(len(index_to_del)):
-            del equations[start][index_to_del[i] - i * 2 + 1]
-            del equations[start][index_to_del[i] - i * 2]
-    if count_start > 1: #if there are more than one "start" -> factorisation
-        index_start = equations[start].index(start) - 1
-        index_to_del = []
-        total_value = ""
-        for i in range(len(equations[start]) // 2):
-            if equations[start][i * 2 + 1] == start:
-                value = equations[start][i * 2]
-                total_value = total_value + "+" + value
-                if i * 2 != index_start:
-                    index_to_del.append(i * 2)
-        equations[start][index_start] = total_value[1:]
-        for i in range(len(index_to_del)):
-            del equations[start][index_to_del[i] - i * 2 + 1]
-            del equations[start][index_to_del[i] - i * 2]
-    #AIDEN
-    value_start = ""
-    value_epsilon = ""
-    if start in equations[start]:
-        value_start = "(" + equations[start][equations[start].index(start) - 1] + ")*"
-    if "€" in equations[start]:
-        value_epsilon = "(" + equations[start][equations[start].index("€") - 1] + ")"
-    return value_start + value_epsilon
-
+    if equations[start].count(start) + equations[start].count("€") == len(
+            equations[start]) // 2:  # if the function found the expression
+        count_start = equations[start].count(start)
+        count_epsilon = equations[start].count("€")
+        if count_epsilon > 1:  # if there are more than one epsilon -> factorisation
+            index_start = equations[start].index("€") - 1
+            index_to_del = []
+            total_value = ""
+            for i in range(len(equations[start]) // 2):
+                if equations[start][i * 2 + 1] == "€":
+                    value = equations[start][i * 2]
+                    total_value = total_value + "+" + value
+                    if i * 2 != index_start:
+                        index_to_del.append(i * 2)
+            equations[start][index_start] = total_value[1:]
+            for i in range(len(index_to_del)):
+                del equations[start][index_to_del[i] - i * 2 + 1]
+                del equations[start][index_to_del[i] - i * 2]
+        if count_start > 1:  # if there are more than one "start" -> factorisation
+            index_start = equations[start].index(start) - 1
+            index_to_del = []
+            total_value = ""
+            for i in range(len(equations[start]) // 2):
+                if equations[start][i * 2 + 1] == start:
+                    value = equations[start][i * 2]
+                    total_value = total_value + "+" + value
+                    if i * 2 != index_start:
+                        index_to_del.append(i * 2)
+            equations[start][index_start] = total_value[1:]
+            for i in range(len(index_to_del)):
+                del equations[start][index_to_del[i] - i * 2 + 1]
+                del equations[start][index_to_del[i] - i * 2]
+        # AIDEN
+        value_start = ""
+        value_epsilon = ""
+        if start in equations[start]:
+            value_start = "(" + equations[start][equations[start].index(start) - 1] + ")*"
+        if "€" in equations[start]:
+            value_epsilon = "(" + equations[start][equations[start].index("€") - 1] + ")"
+        return value_start + value_epsilon
+    else:  # if the function can't find the expression
+        return "Oops, there was a problem while trying to find the expression."
 
 
 def get_equation(dict):
@@ -146,17 +151,19 @@ def get_equation(dict):
                 for item in values2:
                     temp.append(key2)
                     temp.append(item)
-                if key == final :
+                if key == final:
                     temp.append('')
                     temp.append("€")
-                equation[key]=temp
+                equation[key] = temp
+        if final not in dict:
+            equation[final]=["","€"]
         return regular_expression(equation, start)
     else:
         return ""
 
-
 # Tests#
-#e = {"1": ["a", "2", "b", "3"], "2": ["b", "1", "a", "3"], "3": ["a", "1", "b", "2","","€"]}
-#e = {"1": ["a", "2", "b", "3"], "2": ["b", "1"], "3": ["a", "2","","€"]}
-#e = {'q0': ['1', 'q1'], 'q1': ['0', 'q1', '', '€']}
-#print(regular_expression(e, 'q0'))
+# e = {"1": ["a", "2", "b", "3"], "2": ["b", "1", "a", "3"], "3": ["a", "1", "b", "2","","€"]}
+# e = {"1": ["a", "2", "b", "3"], "2": ["b", "1"], "3": ["a", "2","","€"]}
+# print(regular_expression(e, '1'))
+# e = {'q0': ['1', 'q1'], 'q1': ['0', 'q1', '', '€']}
+# print(regular_expression(e, 'q0'))

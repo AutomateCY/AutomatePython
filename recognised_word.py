@@ -21,7 +21,7 @@ def recognised_word(automaton, word):
         automaton = make_deter(automaton)
 
     # Initialize the current state with the initial state of the automaton
-    tmp = automaton['initial_state'][0]
+    tmp = automaton['initial_states'][0]
 
     # Iterate through each letter in the word
     for i in word:
@@ -32,21 +32,17 @@ def recognised_word(automaton, word):
 
             # Update the current state
             tmp = possible_states[0]
-            print(tmp + "\n")
 
         else:
             # If the letter is not a valid transition, display a message and exit
-            print("The word is not recognised by the language")
-            return 1
+            return 0
 
     # Check if the current state is a final state
     if tmp in automaton['final_states']:
-        print("The word is recognised by the language")
-        return 0
+        return 1
     else:
         # If the current state is not a final state, the word is not recognized
-        print("The word is not recognised by the language")
-        return 1
+        return 0
 
 
 

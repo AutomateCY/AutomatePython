@@ -300,7 +300,7 @@ def input_automaton(auto=None):
                 if new_trans['letter'] == 'stop':
                         break
                 
-                choice = input_choice(1,3, "1/create specified trans 2/delete specified trans 3/Cancel")
+                choice = input_choice(1,3, "1/create this transition 2/delete this transition 3/Cancel")
                 
                 if choice == 1:
                     #-- create
@@ -375,3 +375,11 @@ automaton1 = {
 }
 input_automaton(automaton1)
 '''
+
+def aut_delete(list_auto, automaton):
+    for i, aut in enumerate(list_auto):
+        if aut == automaton:
+            del list_auto[i]
+            break
+
+    return list_auto
