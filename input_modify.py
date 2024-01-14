@@ -67,13 +67,16 @@ def modify_list(old, condition = None, condition_name = None, kill = None, alpha
             pass
         elif ans[0] == "+": 
             ans=ans.strip(" +")
-            if (condition == None or ans in condition): #-- add if ans is in condition list, if there is a condition list.
-                if (alpha == None or (len(ans) == 1 or len(ans) == 0)): #-- if its letter, add only single digits.
-                    new_list.append(ans)
-                else:
-                    print("\n /!\ letter are single symbols!")
+            if ("€" in ans):
+                print("\n /!\ You cannot use that symbol : €!")
             else:
-                print("\n /!\ ","'",ans,"' is not in ", condition_name)
+                if (condition == None or ans in condition): #-- add if ans is in condition list, if there is a condition list.
+                    if (alpha == None or (len(ans) == 1 or len(ans) == 0)): #-- if its letter, add only single digits.
+                        new_list.append(ans)
+                    else:
+                        print("\n /!\ letter are single symbols!")
+                else:
+                    print("\n /!\ ","'",ans,"' is not in ", condition_name)
         
         elif ans[0] == "-":#-- replace ans with None if ans in list.
             ans=ans.strip(" -")
