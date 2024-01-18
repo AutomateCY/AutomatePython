@@ -163,8 +163,9 @@ def get_equation(dict):
                     temp.append(key2)
                     temp.append(item)
                 if key == final:
-                    temp.append('')
-                    temp.append("€")
+                    if '€' not in temp:
+                        temp.append('')
+                        temp.append("€")
                 equation[key] = temp
         if final not in dict:
             equation[final] = ["", "€"]
