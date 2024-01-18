@@ -2,10 +2,10 @@ def resolve_equations(initial_state, start: str, equations: dict[str, list[str]]
                       states_to_not_aiden):
     passed_states.append(start)
     if len(equations[start]) > 1:
-        if start not in equations[start] or start in states_to_not_aiden:
+        if start not in equations[start] or start in states_to_not_aiden or (start == initial_state and start in equations[start]):
             for i in range(len(equations[start]) // 2):
                 state = equations[start][i * 2 + 1]
-                if state not in states_to_not_aiden and state != "€":
+                if state not in states_to_not_aiden and state != "€" and state!=start:
                     if state in passed_states:  # Replace + factorisation
                         # start remplace
                         value_state = equations[start][i * 2]
@@ -47,7 +47,7 @@ def resolve_equations(initial_state, start: str, equations: dict[str, list[str]]
                             if start in equations[start]:
                                 resolve_equations(initial_state, start, equations, passed_states, states_to_not_aiden)
                         elif len(equations[state]) == 4 and state not in equations[state]:
-                            if (equations[state][3] == "€"):  # When state=language state + language epsilon
+                            if equations[state][3] == "€":  # When state=language state + language epsilon
                                 v = equations[start][i * 2]
                                 equations[start][i * 2] = v + equations[state][0]
                                 equations[start][i * 2 + 1] = equations[state][1]
@@ -62,30 +62,39 @@ def resolve_equations(initial_state, start: str, equations: dict[str, list[str]]
                             resolve_equations(initial_state, state, equations, passed_states, states_to_not_aiden)
         elif start != initial_state:
             # ARDEN
-            index_value_state = equations[start].index(start) - 1
-            value_start = equations[start][index_value_state]
-            new_exp = []
-            for i in range(len(equations[start]) // 2):
-                if i * 2 != index_value_state:
-                    if len(equations[start][i * 2]) > 0:
-                        e1 = "(" + value_start + ")*(" + equations[start][i * 2] + ")"
-                    else:
-                        e1 = "(" + value_start + ")*"
-                    new_exp.append(e1)
-                    new_exp.append(equations[start][i * 2 + 1])
-            equations[start] = new_exp
-            # Replace "start" in every equation it appears
-            for l in equations.values():
-                while start in l:
-                    index = l.index(start) - 1
-                    v = l[index]
-                    del l[index]
-                    del l[index]
-                    for p in range(len(new_exp)):
-                        if (p % 2 == 0):
-                            l.insert(index + p, v + new_exp[p])
+            if len(equations[start]) > 3:  # L=aL+b with a et b not null
+                index_value_state = equations[start].index(start) - 1
+                value_start = equations[start][index_value_state]
+                new_exp = []
+                for i in range(len(equations[start]) // 2):
+                    if i * 2 != index_value_state:
+                        if len(equations[start][i * 2]) > 0:
+                            e1 = "(" + value_start + ")*(" + equations[start][i * 2] + ")"
                         else:
-                            l.insert(index + p, new_exp[p])
+                            e1 = "(" + value_start + ")*"
+                        new_exp.append(e1)
+                        new_exp.append(equations[start][i * 2 + 1])
+                equations[start] = new_exp
+                # Replace "start" in every equation it appears
+                for l in equations.values():
+                    while start in l:
+                        index = l.index(start) - 1
+                        v = l[index]
+                        del l[index]
+                        del l[index]
+                        for p in range(len(new_exp)):
+                            if p % 2 == 0:
+                                l.insert(index + p, v + new_exp[p])
+                            else:
+                                l.insert(index + p, new_exp[p])
+            else:  # L=aL+b with b null, L=∅
+                equations[start] = []
+                # remove every place where L is
+                for l in equations.values():
+                    while start in l:
+                        index = l.index(start) - 1
+                        del l[index]
+                        del l[index]
 
 
 def regular_expression(equations, start):
@@ -127,13 +136,15 @@ def regular_expression(equations, start):
             for i in range(len(index_to_del)):
                 del equations[start][index_to_del[i] - i * 2 + 1]
                 del equations[start][index_to_del[i] - i * 2]
-        # AIDEN
+        # ARDEN
         value_start = ""
         value_epsilon = ""
         if start in equations[start]:
             value_start = "(" + equations[start][equations[start].index(start) - 1] + ")*"
         if "€" in equations[start]:
             value_epsilon = "(" + equations[start][equations[start].index("€") - 1] + ")"
+        else:
+            return "∅"
         return value_start + value_epsilon
     else:  # if the function can't find the expression
         return "Oops, there was a problem while trying to find the expression."
@@ -156,14 +167,16 @@ def get_equation(dict):
                     temp.append("€")
                 equation[key] = temp
         if final not in dict:
-            equation[final]=["","€"]
+            equation[final] = ["", "€"]
         return regular_expression(equation, start)
     else:
         return ""
 
+
 # Tests#
-# e = {"1": ["a", "2", "b", "3"], "2": ["b", "1", "a", "3"], "3": ["a", "1", "b", "2","","€"]}
-# e = {"1": ["a", "2", "b", "3"], "2": ["b", "1"], "3": ["a", "2","","€"]}
+# e = {"1": ["a", "2", "b", "3"], "2": ["b", "1", "a", "3"], "3": ["a", "1", "b", "2", "", "€"]}
+# e = {"1": ["a", "2", "b", "3"], "2": ["b", "1"], "3": ["a", "2", "", "€"]}
+# e = {'q0': ['1', 'q0,q1', '0', 'q0'], 'q0,q1': ['1', 'q0,q1', '0', 'q0', '', '€']}
 # print(regular_expression(e, '1'))
 # e = {'q0': ['1', 'q1'], 'q1': ['0', 'q1', '', '€']}
 # print(regular_expression(e, 'q0'))
